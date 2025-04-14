@@ -1,48 +1,91 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<title>Jednoduchý Carousel</title>
-<style>
-    * {
-      box-sizing: border-box;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Obrázkový Carousel</title>
+  <style>
     body {
-      margin: 0;
       font-family: sans-serif;
+      background-color: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     .carousel {
-      max-width: 100%;
-      height: 300px; /* o ~40 % menší než běžný hero */
-      overflow: hidden;
       position: relative;
+      width: 600px;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .slides {
-      display: flex;
-      width: 300%;
-      height: 100%;
-      animation: slide 12s infinite;
-    }
-    .slides img {
+    .carousel img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      position: absolute;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
     }
-    @keyframes slide {
-      0%   {margin-left: 0;}
-      33%  {margin-left: -100%;}
-      66%  {margin-left: -200%;}
-      100% {margin-left: 0;}
+    .carousel img.active {
+      opacity: 1;
+      position: relative;
     }
-</style>
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+      background: rgba(255,255,255,0.7);
+      border: none;
+      cursor: pointer;
+      padding: 0.3em 0.6em;
+      border-radius: 50%;
+      user-select: none;
+    }
+    .nav.left {
+      left: 10px;
+    }
+    .nav.right {
+      right: 10px;
+    }
+  </style>
 </head>
 <body>
-<div class="carousel">
-<div class="slides">
-<img src="https://placekitten.com/1024/600" alt="Obrázek 1">
-<img src="https://placekitten.com/1025/600" alt="Obrázek 2">
-<img src="https://placekitten.com/1026/600" alt="Obrázek 3">
-</div>
-</div>
+  <div class="carousel" id="carousel">
+    <img src="https://picsum.photos/id/1/600/300" class="active" />
+    <img src="https://picsum.photos/id/2/600/300" />
+    <img src="https://picsum.photos/id/3/600/300" />
+    <img src="https://picsum.photos/id/4/600/300" />
+    <img src="https://picsum.photos/id/5/600/300" />
+    <button class="nav left" onclick="prevSlide()">&#8592;</button>
+    <button class="nav right" onclick="nextSlide()">&#8594;</button>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll("#carousel img");
+    let current = 0;
+
+    function showSlide(index) {
+      images.forEach((img, i) => {
+        img.classList.toggle("active", i === index);
+      });
+    }
+
+    function nextSlide() {
+      current = (current + 1) % images.length;
+      showSlide(current);
+    }
+
+    function prevSlide() {
+      current = (current - 1 + images.length) % images.length;
+      showSlide(current);
+    }
+
+    // Optional: auto-advance
+    setInterval(nextSlide, 5000);
+  </script>
 </body>
 </html>
